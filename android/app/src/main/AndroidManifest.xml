@@ -6,7 +6,7 @@
 
     <application
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logo"
         android:label="nas_phone">
         <activity
             android:name=".MainActivity"
