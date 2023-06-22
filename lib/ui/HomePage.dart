@@ -18,7 +18,7 @@ class _HomePage extends State<HomePage> with LifecycleAware, LifecycleMixin {
   @override
   void initState() {
     super.initState();
-    initData();
+    initForPermission();
   }
 
   List<Contact> contacts = [];
@@ -46,12 +46,13 @@ class _HomePage extends State<HomePage> with LifecycleAware, LifecycleMixin {
           ],
         ),
         body: Container(
+            padding: EdgeInsets.only(bottom: 40),
             child: ListView.builder(
-          itemCount: contacts.length,
-          itemBuilder: (context, index) {
-            return _getItemWithIndex(contacts[index]);
-          },
-        )));
+              itemCount: contacts.length,
+              itemBuilder: (context, index) {
+                return _getItemWithIndex(contacts[index]);
+              },
+            )));
   }
 
   void initData() {
@@ -66,17 +67,22 @@ class _HomePage extends State<HomePage> with LifecycleAware, LifecycleMixin {
 
   Widget _getItemWithIndex(Contact contact) {
     return Visibility(
-        visible: contactStore.isInLocal(contact.id),
-        child: Container(
-          padding: EdgeInsets.only(left: 2, right: 2, top: 10, bottom: 10),
-          child: ListTile(
-            leading: contact.photo == null
+      visible: contactStore.isInLocal(contact.id),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 110,
+        child: Row(
+          children: [
+            SizedBox(
+              width: 10,
+            ),
+            contact.photo == null
                 ? Container(
-                    width: 70,
-                    height: 70,
+                    width: 100,
+                    height: 100,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(45),
+                      borderRadius: BorderRadius.circular(50),
                       color: Colors.grey,
                     ),
                     child: Text(
@@ -88,32 +94,48 @@ class _HomePage extends State<HomePage> with LifecycleAware, LifecycleMixin {
                             fontWeight: FontWeight.bold,
                             color: Colors.white)))
                 : Container(
-                    width: 70,
-                    height: 70,
+                    width: 100,
+                    height: 100,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(45),
+                        borderRadius: BorderRadius.circular(50),
                         image: DecorationImage(
                             image: MemoryImage(contact.photo!),
                             fit: BoxFit.cover))),
-            title: Text(
-              contact.displayName,
-              style: TextStyle(fontSize: 30),
-            ),
-            subtitle: Text(
-              contact.phones.first.number,
-              style: TextStyle(fontSize: 20),
-            ),
-            onTap: () {
-              contactStore.call(contact.phones.first.number);
-            },
-          ),
-        ));
+            Expanded(
+                child: ListTile(
+              dense: false,
+              title: Container(
+                child: Text(
+                  contact.displayName,
+                  style: TextStyle(fontSize: 30),
+                ),
+              ),
+              subtitle: Text(
+                contact.phones.first.number,
+                style: TextStyle(fontSize: 20),
+              ),
+              onTap: () {
+                contactStore.call(contact.phones.first.number);
+              },
+            ))
+          ],
+        ),
+      ),
+    );
   }
 
   @override
   void onLifecycleEvent(LifecycleEvent event) {
     if (event == LifecycleEvent.active) {
       setState(() {});
+    }
+  }
+
+  Future<void> initForPermission() async {
+    if (await Permission.contacts.request().isGranted) {
+      initData();
+    } else {
+      "请授予通讯录权限".bbToast();
     }
   }
 }
