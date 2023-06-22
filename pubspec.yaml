@@ -50,6 +50,7 @@ dependencies:
   image: ^3.2.2
   lifecycle: ^0.5.0
   flutter_phone_direct_caller: ^2.1.1
+  flutter_tts: ^3.7.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

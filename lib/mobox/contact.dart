@@ -1,5 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:mobx/mobx.dart';
+import 'package:nas_phone/CallDia.dart';
 
 import '../db/LocalAddressDb.dart';
 
@@ -15,6 +18,7 @@ final contactStore = contact();
 abstract class _contact with Store {
   @observable
   List<Map> had = [];
+
 
   @action
   Future<void> getAllLocalData() async {
@@ -44,7 +48,7 @@ abstract class _contact with Store {
     await getAllLocalData();
   }
 
-  Future<void> call(String number) async {
-    bool? res = await FlutterPhoneDirectCaller.callNumber(number);
+  Future<void> call(BuildContext  context, String number) async {
+    showCallDialog(context, number);
   }
 }

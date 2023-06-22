@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:nas_phone/ExtUtils.dart';
 import 'package:nas_phone/mobox/route.dart';
 import 'package:nas_phone/np.dart';
@@ -18,9 +19,11 @@ class _HomePage extends State<HomePage> with LifecycleAware, LifecycleMixin {
   @override
   void initState() {
     super.initState();
+    initForFirst();
     initForPermission();
   }
 
+  FlutterTts flutterTts = FlutterTts();
   List<Contact> contacts = [];
 
   @override
@@ -111,11 +114,12 @@ class _HomePage extends State<HomePage> with LifecycleAware, LifecycleMixin {
                 ),
               ),
               subtitle: Text(
-                contact.phones.first.number,
+                contact.phones.firstOrNull?.number ?? "",
                 style: TextStyle(fontSize: 20),
               ),
-              onTap: () {
-                contactStore.call(contact.phones.first.number);
+              onTap: () async {
+                await flutterTts.speak("打给${contact.displayName}}");
+                await contactStore.call(context, contact.phones.first.number);
               },
             ))
           ],
@@ -137,5 +141,15 @@ class _HomePage extends State<HomePage> with LifecycleAware, LifecycleMixin {
     } else {
       "请授予通讯录权限".bbToast();
     }
+  }
+
+  Future<void> initForFirst() async {
+    await flutterTts.setLanguage("zh-CN");
+
+    await flutterTts.setSpeechRate(1.0);
+
+    await flutterTts.setVolume(1.0);
+
+    await flutterTts.setPitch(1.0);
   }
 }
