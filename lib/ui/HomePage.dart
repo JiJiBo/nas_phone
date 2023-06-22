@@ -42,7 +42,6 @@ class _HomePage extends State<HomePage> with LifecycleAware, LifecycleMixin {
                     "请授予通讯录权限".bbToast();
                   }
                 },
-
                 child: Icon(Icons.add))
           ],
         ),
@@ -68,37 +67,46 @@ class _HomePage extends State<HomePage> with LifecycleAware, LifecycleMixin {
   Widget _getItemWithIndex(Contact contact) {
     return Visibility(
         visible: contactStore.isInLocal(contact.id),
-        child: ListTile(
-          leading: contact.photo == null
-              ? Container(
-                  width: 45,
-                  height: 45,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(45),
-                    color: Colors.grey,
-                  ),
-                  child: Text(
-                      contact.displayName.length > 0
-                          ? contact.displayName[0].toUpperCase()
-                          : "",
-                      style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white)))
-              : Container(
-                  width: 45,
-                  height: 45,
-                  decoration: BoxDecoration(
+        child: Container(
+          padding: EdgeInsets.only(left: 2, right: 2, top: 10, bottom: 10),
+          child: ListTile(
+            leading: contact.photo == null
+                ? Container(
+                    width: 70,
+                    height: 70,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(45),
-                      image: DecorationImage(
-                          image: MemoryImage(contact.photo!),
-                          fit: BoxFit.cover))),
-          title: Text(contact.displayName),
-          subtitle: Text(contact.phones.first.number),
-          onTap: () {
-            contactStore.call(contact.phones.first.number);
-          },
+                      color: Colors.grey,
+                    ),
+                    child: Text(
+                        contact.displayName.length > 0
+                            ? contact.displayName[0].toUpperCase()
+                            : "",
+                        style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white)))
+                : Container(
+                    width: 70,
+                    height: 70,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(45),
+                        image: DecorationImage(
+                            image: MemoryImage(contact.photo!),
+                            fit: BoxFit.cover))),
+            title: Text(
+              contact.displayName,
+              style: TextStyle(fontSize: 30),
+            ),
+            subtitle: Text(
+              contact.phones.first.number,
+              style: TextStyle(fontSize: 20),
+            ),
+            onTap: () {
+              contactStore.call(contact.phones.first.number);
+            },
+          ),
         ));
   }
 

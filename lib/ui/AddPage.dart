@@ -41,7 +41,10 @@ class _AddPage extends State<AddPage> {
                   await FlutterContacts.openExternalInsert();
                   initData();
                 },
-                child: Text("添加"))
+                child: Text(
+                  "添加",
+                  style: TextStyle(color: Colors.white),
+                ))
           ],
         ),
         body: Column(
