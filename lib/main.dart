@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:nas_phone/ui/AddPage.dart';
 import 'package:nas_phone/ui/HomePage.dart';
 import 'package:nas_phone/ui/WelcomePage.dart';
@@ -28,7 +29,10 @@ class MyApp extends StatelessWidget {
       title: '电话本',
       routes: routes,
       builder: BotToastInit(),
-      navigatorObservers: [BotToastNavigatorObserver()],
+      navigatorObservers: [
+        defaultLifecycleObserver,
+        BotToastNavigatorObserver(),
+      ],
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
